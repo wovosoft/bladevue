@@ -43,12 +43,12 @@ class BladeToVueRender extends Command
                     ->value()
             ));
 
-
             File::ensureDirectoryExists(dirname($outputPath));
 
-            $html = view("components.render-blade-to-vue", [
-                "screen" => app()->make($symbol)->render()
-            ]);
+            $html = view(
+                "components.render-vue-screen",
+                ["screen" => app()->make($symbol)->render()]
+            )->render();
 
             File::put($outputPath, $html);
         }

@@ -2,13 +2,16 @@
 
 namespace App\BladeVue\Components\Ui\Screens;
 
+use App\BladeVue\Components\BaseComponent;
+use App\BladeVue\Traits\Basic\HasSchema;
 use App\BladeVue\Traits\Basic\HasTitle;
 
 class Screen
 {
     use HasTitle;
+    use HasSchema;
 
-    public array $schema;
+    private array $imports = [];
 
     /**
      * Returns an instance of Screen Class
@@ -20,15 +23,10 @@ class Screen
         return new static();
     }
 
-    /**
-     * Set Schema for the Screen
-     *
-     * @param array $schema
-     * @return $this
-     */
-    public function schema(array $schema): self
+    public function getImports(): array
     {
-        $this->schema = $schema;
-        return $this;
+        return $this->imports;
     }
+
+
 }

@@ -2,13 +2,20 @@
 
 namespace App\BladeVue\Components\Ui\Cards;
 
-class Card
+use App\BladeVue\Components\BaseComponent;
+
+class Card extends BaseComponent
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+    public string $name = "Card";
+    public string $from = "@/components/ui/card";
+
+    public function getProps(): array
     {
-        //
+        return [];
+    }
+
+    public function content(mixed $content): static
+    {
+        return $this->setSlot('default', $content);
     }
 }

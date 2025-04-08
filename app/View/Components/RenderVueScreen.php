@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class RenderBladeToVue extends Component
+class RenderVueScreen extends Component
 {
     /**
      * Create a new component instance.
@@ -24,6 +24,6 @@ class RenderBladeToVue extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.render-blade-to-vue');
+        return view('components.render-vue-screen');
     }
 }

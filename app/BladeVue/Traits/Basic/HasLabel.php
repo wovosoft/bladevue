@@ -9,6 +9,7 @@ trait HasLabel
     public function label(string $label): self
     {
         $this->label = $label;
+
         return $this;
     }
 

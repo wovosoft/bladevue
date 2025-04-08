@@ -3,7 +3,9 @@
 namespace App\BladeVue\Pages\About;
 
 use App\BladeVue\Components\Buttons\Button;
+use App\BladeVue\Components\Ui\Cards\Card;
 use App\BladeVue\Components\Ui\Screens\Screen;
+use App\BladeVue\Enums\ButtonVariants;
 
 class Index
 {
@@ -15,13 +17,26 @@ class Index
             ->title("Blade Vue is awesome!")
             ->schema([
                 Button::make()
-                    ->variant('primary')
-                    ->label("Button with Label")
+                    ->variant(ButtonVariants::Destructive)
+                    ->label("Destructive Small Button")
                     ->size('sm'),
+
                 Button::make()
-                    ->variant('primary')
-                    ->label("Button with Label")
+                    ->variant(ButtonVariants::Outline)
+                    ->label("Outline Small Button")
                     ->size('sm'),
+
+                Button::make()
+                    ->variant(ButtonVariants::Destructive)
+                    ->label("Destructive Default Button"),
+
+                Card::make()
+                    ->schema([
+                        Button::make()
+                            ->variant(ButtonVariants::Outline)
+                            ->label("Outline Default Button")
+                    ])
+
             ]);
     }
 }

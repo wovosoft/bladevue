@@ -1,4 +1,9 @@
 <script setup lang="ts">
+
+    @foreach($screen->getImports() as $path=>$imports)
+        import { {{join(", ",$imports)}} } from "{{$path}}";
+    @endforeach
+
     const props = withDefaults(defineProps < {
         title? : string
     } > (), {
