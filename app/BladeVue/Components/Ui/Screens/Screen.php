@@ -28,6 +28,14 @@ class Screen
         return new static();
     }
 
+    public static function getFile()
+    {
+        return str(__DIR__)
+            ->replaceLast(".php", ".vue")
+            ->replaceFirst(app_path(), "")
+            ->value();
+    }
+
     public function layout(string $name, string $from): static
     {
         $this->layout = ["name" => $name, "from" => $from];

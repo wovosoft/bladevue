@@ -6,10 +6,16 @@ use App\BladeVue\Components\Buttons\Button;
 use App\BladeVue\Components\Ui\Cards\Card;
 use App\BladeVue\Components\Ui\Screens\Screen;
 use App\BladeVue\Enums\ButtonVariants;
+use Inertia\Response;
 
 class Index
 {
     public static string $file = "BladeVue/Pages/About/Index";
+
+    public static function serve(array $data = []): Response
+    {
+        return inertia(self::$file, $data);
+    }
 
     public function render()
     {
