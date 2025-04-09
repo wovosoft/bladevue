@@ -60,4 +60,9 @@ class BaseComponent implements BaseComponentInterface
             "schema" => $this
         ]);
     }
+
+    public function getProps(): array
+    {
+        return [];
+    }
 }

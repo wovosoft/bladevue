@@ -4,7 +4,6 @@ namespace App\BladeVue\Components\Buttons;
 
 use App\BladeVue\Components\BaseComponent;
 use App\BladeVue\Traits\Basic\HasLabel;
-use App\BladeVue\Traits\Basic\HasMake;
 use App\BladeVue\Traits\Basic\HasSize;
 use App\BladeVue\Traits\Basic\HasVariants;
 

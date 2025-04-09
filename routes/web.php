@@ -12,9 +12,10 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
-Route::get('test', function () {
-    return Inertia::render(Index::$file);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('test', function () {
+        return Inertia::render(Index::$file);
+    });
 });
 
 require __DIR__ . '/settings.php';

@@ -1,30 +1,116 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+    
+    import AppLayout from "@/layouts/AppLayout.vue";
 
-const props = withDefaults(
-    defineProps<{
-        title?: string;
-    }>(),
-    {
-        title: 'Blade Vue is awesome!',
-    },
-);
+            import { Button } from "@/components/ui/button";
+            import { Card } from "@/components/ui/card";
+    
+    const props = withDefaults(defineProps < {
+        title? : string
+    } > (), {
+        title: "Blade Vue is awesome!"
+    });
 </script>
 
 <template>
-    <div>
-        <Button variant="destructive" size="sm">
-            <template #default> Destructive Small Button </template>
-        </Button>
-        <Button variant="outline" size="sm">
-            <template #default> Outline Small Button </template>
-        </Button>
-        <Button variant="destructive" size="">
-            <template #default> Destructive Default Button </template>
-        </Button>
-        <Card>
-            <template #default> Hello world! </template>
-        </Card>
-    </div>
+    <AppLayout>
+                                    <Button  variant="destructive" size="sm">
+
+    <template #default>
+        Destructive Small Button
+    </template>
+
+
+</Button>
+                            <Button  variant="outline" size="sm">
+
+    <template #default>
+        Outline Small Button
+    </template>
+
+
+</Button>
+                            <Button  variant="destructive" size="">
+
+    <template #default>
+        Destructive Default Button
+    </template>
+
+
+</Button>
+                            <Card  >
+
+
+            <Button  variant="outline" size="">
+
+    <template #default>
+        Outline Default Button
+    </template>
+
+
+</Button>
+            <Button  variant="outline" size="">
+
+    <template #default>
+        Outline Default Button
+    </template>
+
+
+</Button>
+            <Button  variant="outline" size="">
+
+    <template #default>
+        Outline Default Button
+    </template>
+
+
+</Button>
+            <Button  variant="outline" size="">
+
+    <template #default>
+        Outline Default Button
+    </template>
+
+
+</Button>
+            <Card  >
+
+
+            <Button  variant="outline" size="">
+
+    <template #default>
+        Outline Default Button
+    </template>
+
+
+</Button>
+            <Button  variant="outline" size="">
+
+    <template #default>
+        Outline Default Button
+    </template>
+
+
+</Button>
+            <Button  variant="outline" size="">
+
+    <template #default>
+        Outline Default Button
+    </template>
+
+
+</Button>
+            <Button  variant="outline" size="">
+
+    <template #default>
+        Outline Default Button
+    </template>
+
+
+</Button>
+    
+</Card>
+    
+</Card>
+                        </AppLayout>
 </template>

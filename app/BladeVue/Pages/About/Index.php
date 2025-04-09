@@ -34,7 +34,32 @@ class Index
                     ->schema([
                         Button::make()
                             ->variant(ButtonVariants::Outline)
-                            ->label("Outline Default Button")
+                            ->label("Outline Default Button"),
+                        Button::make()
+                            ->variant(ButtonVariants::Outline)
+                            ->label("Outline Default Button"),
+                        Button::make()
+                            ->variant(ButtonVariants::Outline)
+                            ->label("Outline Default Button"),
+                        Button::make()
+                            ->variant(ButtonVariants::Outline)
+                            ->label("Outline Default Button"),
+
+                        Card::make()
+                            ->schema([
+                                Button::make()
+                                    ->variant(ButtonVariants::Outline)
+                                    ->label("Outline Default Button"),
+                                Button::make()
+                                    ->variant(ButtonVariants::Outline)
+                                    ->label("Outline Default Button"),
+                                Button::make()
+                                    ->variant(ButtonVariants::Outline)
+                                    ->label("Outline Default Button"),
+                                Button::make()
+                                    ->variant(ButtonVariants::Outline)
+                                    ->label("Outline Default Button"),
+                            ])
                     ])
 
             ]);
