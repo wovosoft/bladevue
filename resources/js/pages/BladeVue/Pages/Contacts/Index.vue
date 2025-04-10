@@ -1,30 +1,15 @@
 <script setup lang="ts">
-import type {
-    ColumnDef,
-    ColumnFiltersState,
-    ExpandedState,
-    SortingState,
-    VisibilityState,
-} from '@tanstack/vue-table'
+import type { ColumnDef, ColumnFiltersState, ExpandedState, SortingState, VisibilityState } from '@tanstack/vue-table';
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 
-import { Checkbox } from '@/components/ui/checkbox'
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table'
+import { Checkbox } from '@/components/ui/checkbox';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/AppLayout.vue';
+import type { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/vue3';
 import {
     FlexRender,
     getCoreRowModel,
@@ -33,17 +18,17 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useVueTable,
-} from '@tanstack/vue-table'
-import { ArrowUpDown, ChevronDown } from 'lucide-vue-next'
-import { h, ref, shallowRef } from 'vue'
-import AppLayout from '@/layouts/AppLayout.vue';
+} from '@tanstack/vue-table';
+import { ArrowUpDown, ChevronDown } from 'lucide-vue-next';
+import { h, ref, shallowRef } from 'vue';
 
+const props = defineProps(['title', 'records']);
 
 export interface Payment {
-    id: string
-    amount: number
-    status: 'pending' | 'processing' | 'success' | 'failed'
-    email: string
+    id: string;
+    amount: number;
+    status: 'pending' | 'processing' | 'success' | 'failed';
+    email: string;
 }
 
 const data = shallowRef<Payment[]>([
@@ -77,21 +62,23 @@ const data = shallowRef<Payment[]>([
         status: 'failed',
         email: 'carmella@hotmail.com',
     },
-])
+]);
 
 const columns: ColumnDef<Payment>[] = [
     {
         id: 'select',
-        header: ({ table }) => h(Checkbox, {
-            'modelValue': table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate'),
-            'onUpdate:modelValue': value => table.toggleAllPageRowsSelected(!!value),
-            'ariaLabel': 'Select all',
-        }),
-        cell: ({ row }) => h(Checkbox, {
-            'modelValue': row.getIsSelected(),
-            'onUpdate:modelValue': value => row.toggleSelected(!!value),
-            'ariaLabel': 'Select row',
-        }),
+        header: ({ table }) =>
+            h(Checkbox, {
+                modelValue: table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate'),
+                'onUpdate:modelValue': (value) => table.toggleAllPageRowsSelected(!!value),
+                ariaLabel: 'Select all',
+            }),
+        cell: ({ row }) =>
+            h(Checkbox, {
+                modelValue: row.getIsSelected(),
+                'onUpdate:modelValue': (value) => row.toggleSelected(!!value),
+                ariaLabel: 'Select row',
+            }),
         enableSorting: false,
         enableHiding: false,
     },
@@ -103,10 +90,14 @@ const columns: ColumnDef<Payment>[] = [
     {
         accessorKey: 'email',
         header: ({ column }) => {
-            return h(Button, {
-                variant: 'ghost',
-                onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-            }, () => ['Email', h(ArrowUpDown, { class: 'ml-2 h-4 w-4' })])
+            return h(
+                Button,
+                {
+                    variant: 'ghost',
+                    onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+                },
+                () => ['Email', h(ArrowUpDown, { class: 'ml-2 h-4 w-4' })],
+            );
         },
         cell: ({ row }) => h('div', { class: 'lowercase' }, row.getValue('email')),
     },
@@ -114,36 +105,40 @@ const columns: ColumnDef<Payment>[] = [
         accessorKey: 'amount',
         header: () => h('div', { class: 'text-right' }, 'Amount'),
         cell: ({ row }) => {
-            const amount = Number.parseFloat(row.getValue('amount'))
+            const amount = Number.parseFloat(row.getValue('amount'));
 
             // Format the amount as a dollar amount
             const formatted = new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
-            }).format(amount)
+            }).format(amount);
 
-            return h('div', { class: 'text-right font-medium' }, formatted)
+            return h('div', { class: 'text-right font-medium' }, formatted);
         },
     },
     {
         id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
-            const payment = row.original
+            const payment = row.original;
 
-            return h('div', { class: 'relative' }, h("div", {
-                payment,
-                onExpand: row.toggleExpanded,
-            }))
+            return h(
+                'div',
+                { class: 'relative' },
+                h('div', {
+                    payment,
+                    onExpand: row.toggleExpanded,
+                }),
+            );
         },
     },
-]
+];
 
-const sorting = ref<SortingState>([])
-const columnFilters = ref<ColumnFiltersState>([])
-const columnVisibility = ref<VisibilityState>({})
-const rowSelection = ref({})
-const expanded = ref<ExpandedState>({})
+const sorting = ref<SortingState>([]);
+const columnFilters = ref<ColumnFiltersState>([]);
+const columnVisibility = ref<VisibilityState>({});
+const rowSelection = ref({});
+const expanded = ref<ExpandedState>({});
 
 const table = useVueTable({
     data,
@@ -155,115 +150,152 @@ const table = useVueTable({
     getExpandedRowModel: getExpandedRowModel(),
 
     state: {
-        get sorting() { return sorting.value },
-        get columnFilters() { return columnFilters.value },
-        get columnVisibility() { return columnVisibility.value },
-        get rowSelection() { return rowSelection.value },
-        get expanded() { return expanded.value },
+        get sorting() {
+            return sorting.value;
+        },
+        get columnFilters() {
+            return columnFilters.value;
+        },
+        get columnVisibility() {
+            return columnVisibility.value;
+        },
+        get rowSelection() {
+            return rowSelection.value;
+        },
+        get expanded() {
+            return expanded.value;
+        },
     },
-})
+});
 
-const statuses: Payment['status'][] = ['pending', 'processing', 'success', 'failed']
+const statuses: Payment['status'][] = ['pending', 'processing', 'success', 'failed'];
+
 function randomize() {
-    data.value = data.value.map(item => ({
+    data.value = data.value.map((item) => ({
         ...item,
         status: statuses[Math.floor(Math.random() * statuses.length)],
-    }))
+    }));
 }
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Contacts',
+        href: '/contacts',
+    },
+];
+
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 </script>
 
 <template>
-    <AppLayout class="w-full">
-        <div class="flex gap-2 items-center py-4">
-            <Input
-                class="max-w-52"
-                placeholder="Filter emails..."
-                :model-value="table.getColumn('email')?.getFilterValue() as string"
-                @update:model-value=" table.getColumn('email')?.setFilterValue($event)"
-            />
-            <Button @click="randomize">
-                Randomize
-            </Button>
-            <DropdownMenu>
-                <DropdownMenuTrigger as-child>
-                    <Button variant="outline" class="ml-auto">
-                        Columns <ChevronDown class="ml-2 h-4 w-4" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuCheckboxItem
-                        v-for="column in table.getAllColumns().filter((column) => column.getCanHide())"
-                        :key="column.id"
-                        class="capitalize"
-                        :model-value="column.getIsVisible()"
-                        @update:model-value="(value) => {
-              column.toggleVisibility(!!value)
-            }"
-                    >
-                        {{ column.id }}
-                    </DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
-        <div class="rounded-md border">
-            <Table>
-                <TableHeader>
-                    <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-                        <TableHead v-for="header in headerGroup.headers" :key="header.id">
-                            <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header" :props="header.getContext()" />
-                        </TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <template v-if="table.getRowModel().rows?.length">
-                        <template v-for="row in table.getRowModel().rows" :key="row.id">
-                            <TableRow :data-state="row.getIsSelected() && 'selected'">
-                                <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-                                    <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
-                                </TableCell>
-                            </TableRow>
-                            <TableRow v-if="row.getIsExpanded()">
-                                <TableCell :colspan="row.getAllCells().length">
-                                    {{ JSON.stringify(row.original) }}
-                                </TableCell>
-                            </TableRow>
-                        </template>
-                    </template>
-
-                    <TableRow v-else>
-                        <TableCell
-                            :colspan="columns.length"
-                            class="h-24 text-center"
-                        >
-                            No results.
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-        </div>
-
-        <div class="flex items-center justify-end space-x-2 py-4">
-            <div class="flex-1 text-sm text-muted-foreground">
-                {{ table.getFilteredSelectedRowModel().rows.length }} of
-                {{ table.getFilteredRowModel().rows.length }} row(s) selected.
+    <Head :title="title" />
+    <AppLayout class="w-full" :breadcrumbs="breadcrumbs">
+        <div class="container p-3">
+            <div class="flex items-center justify-between">
+                <h3 class="mb-5 text-2xl">{{ title }}</h3>
+                <div class="flex gap-2">
+                    <Button size="sm">Action</Button>
+                    <Button size="sm">Action</Button>
+                </div>
             </div>
-            <div class="space-x-2">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    :disabled="!table.getCanPreviousPage()"
-                    @click="table.previousPage()"
-                >
-                    Previous
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    :disabled="!table.getCanNextPage()"
-                    @click="table.nextPage()"
-                >
-                    Next
-                </Button>
+
+            <!-- Table Filters -->
+            <div class="flex justify-items-start gap-2">
+                <Select v-for="x in 5">
+                    <SelectTrigger class="w-[180px]">
+                        <SelectValue placeholder="Select a fruit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>Fruits</SelectLabel>
+                            <SelectItem value="apple"> Apple </SelectItem>
+                            <SelectItem value="banana"> Banana </SelectItem>
+                            <SelectItem value="blueberry"> Blueberry </SelectItem>
+                            <SelectItem value="grapes"> Grapes </SelectItem>
+                            <SelectItem value="pineapple"> Pineapple </SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <!-- Table Top Bar -->
+            <div class="flex items-center gap-2 py-4">
+                <Input
+                    class="max-w-52"
+                    placeholder="Filter emails..."
+                    :model-value="table.getColumn('email')?.getFilterValue() as string"
+                    @update:model-value="table.getColumn('email')?.setFilterValue($event)"
+                />
+                <Button @click="randomize"> Randomize</Button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger as-child>
+                        <Button variant="outline" class="ml-auto">
+                            Columns
+                            <ChevronDown class="ml-2 h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuCheckboxItem
+                            v-for="column in table.getAllColumns().filter((column) => column.getCanHide())"
+                            :key="column.id"
+                            class="capitalize"
+                            :model-value="column.getIsVisible()"
+                            @update:model-value="
+                                (value) => {
+                                    column.toggleVisibility(!!value);
+                                }
+                            "
+                        >
+                            {{ column.id }}
+                        </DropdownMenuCheckboxItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+            <div class="rounded-md border">
+                <Table>
+                    <TableHeader>
+                        <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+                            <TableHead v-for="header in headerGroup.headers" :key="header.id">
+                                <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header" :props="header.getContext()" />
+                            </TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <template v-if="table.getRowModel().rows?.length">
+                            <template v-for="row in table.getRowModel().rows" :key="row.id">
+                                <TableRow :data-state="row.getIsSelected() && 'selected'">
+                                    <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+                                        <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow v-if="row.getIsExpanded()">
+                                    <TableCell :colspan="row.getAllCells().length">
+                                        {{ JSON.stringify(row.original) }}
+                                    </TableCell>
+                                </TableRow>
+                            </template>
+                        </template>
+
+                        <TableRow v-else>
+                            <TableCell :colspan="columns.length" class="h-24 text-center"> No results.</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 py-4">
+                <div class="flex-1 text-sm text-muted-foreground">
+                    {{ table.getFilteredSelectedRowModel().rows.length }} of {{ table.getFilteredRowModel().rows.length }}
+                    row(s) selected.
+                </div>
+                <div class="space-x-2">
+                    <Button variant="outline" size="sm" :disabled="!table.getCanPreviousPage()" @click="table.previousPage()"> Previous </Button>
+                    <Button variant="outline" size="sm" :disabled="!table.getCanNextPage()" @click="table.nextPage()"> Next </Button>
+                </div>
             </div>
         </div>
     </AppLayout>
