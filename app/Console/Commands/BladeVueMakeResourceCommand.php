@@ -3,69 +3,60 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
-use function Laravel\Prompts\select;
+use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
 
-class BladeVueMakeResourceCommand extends Command
+#[AsCommand(name: 'bv:make-resource')]
+class BladeVueMakeResourceCommand extends GeneratorCommand
 {
     /**
-     * The name and signature of the console command.
+     * The console command name.
      *
      * @var string
      */
-    protected $signature = 'bv:make-resource {name?}';
+    protected $name = 'bv:make-resource';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a Blade Vue Resource';
+    protected $description = 'Create a new controller class';
 
     /**
-     * Execute the console command.
+     * The type of class being generated.
+     *
+     * @var string
      */
-    public function handle(): void
+    protected $type = 'Controller';
+
+    protected function getStub()
     {
-        $name = $this->argument('name');
-
-        if (is_null($name)) {
-            $name = $this->ask('What is the panel name?');
-        }
-
-        //get first level folders in BladeVue folder
-        $panels = Arr::map(File::directories(app_path('Http/Controllers/BladeVue')), function ($path) {
-            return basename($path);
-        });
-
-        if (empty($panels)) {
-            $this->warn('No panels found.');
-            return;
-        }
-
-        $panel = select(label: "Select a panel", options: $panels, required: true);
-
-        collect([
-            "index",
-            "create",
-            "update",
-            "edit",
-            "show",
-            "destroy",
-        ])->each(function ($method) use ($name, $panel) {
-            $method = str($method)->pascal();
-            $name   = str($name)->pluralPascal();
-
-            Artisan::call("make:controller", [
-                "name"        => "BladeVue/$panel/$name/{$method}Controller",
-                "--invokable" => true
-            ]);
-
-            $this->info(Artisan::output());
-
-        });
-
+        // TODO: Implement getStub() method.
     }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param string $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
+    {
+        return $rootNamespace . '\Http\Controllers\BladeVue';
+    }
+
+    /**
+     * Resolve the fully-qualified path to the stub.
+     *
+     * @param string $stub
+     * @return string
+     */
+    protected function resolveStubPath($stub)
+    {
+        return file_exists($customPath = $this->laravel->resourcePath(trim($stub, '/')))
+            ? $customPath
+            : __DIR__ . $stub;
+    }
+
 }
